@@ -166,6 +166,9 @@ export const VideoQuote = () => {
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[800ms] ease-in-out ${
           activeVideo === 1 ? "opacity-100" : "opacity-0"
         }`}
+        style={{
+          transform: 'scale(1.02) translateY(-2%)',
+        }}
         autoPlay
         playsInline
         muted
@@ -176,6 +179,9 @@ export const VideoQuote = () => {
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[800ms] ease-in-out ${
           activeVideo === 2 ? "opacity-100" : "opacity-0"
         }`}
+        style={{
+          transform: 'scale(1.02) translateY(-2%)',
+        }}
         playsInline
         muted
         loop={false}
