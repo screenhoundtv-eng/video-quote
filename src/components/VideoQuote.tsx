@@ -207,7 +207,29 @@ export const VideoQuote = () => {
         </p>
       </div>
 
-      {/* Watermark Logo */}
+      {/* Fullscreen Button */}
+      <button
+        onClick={toggleFullscreen}
+        className="absolute top-6 right-6 z-20 bg-black/50 hover:bg-black/70 text-white p-3 rounded-lg transition-all opacity-60 hover:opacity-100"
+        title="Toggle Fullscreen (F key or double-click)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+          stroke="currentColor"
+          className="w-6 h-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+          />
+        </svg>
+      </button>
+
+      {/* Watermark Logo - Bottom Right Corner */}
       <div className="absolute bottom-6 right-6 z-10 opacity-60 hover:opacity-80 transition-opacity">
         <img
           src={logo}
