@@ -21,6 +21,7 @@ export const VideoQuote = () => {
   const videoRef1 = useRef<HTMLVideoElement>(null);
   const videoRef2 = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const quoteIntervalRef = useRef<number | null>(null);
 
   // Parse CSV and extract quotes
   useEffect(() => {
@@ -44,11 +45,8 @@ export const VideoQuote = () => {
 
         setQuotes(parsedQuotes);
 
-        // Immediately show random quote and start video
+        // Start video and quote cycling immediately
         if (parsedQuotes.length > 0) {
-          const randomQuote = parsedQuotes[Math.floor(Math.random() * parsedQuotes.length)];
-          setCurrentQuote(randomQuote);
-
           // Start first video
           setTimeout(() => {
             const video1 = videoRef1.current;
@@ -57,15 +55,8 @@ export const VideoQuote = () => {
             }
           }, 100);
 
-          // Fade in quote after 2 seconds (1.5s fade in)
-          setTimeout(() => {
-            setShowQuote(true);
-
-            // Keep quote visible for 5 seconds, then fade out (1.5s fade out)
-            setTimeout(() => {
-              setShowQuote(false);
-            }, 5000);
-          }, 2000);
+          // Start continuous quote cycling
+          startQuoteCycling(parsedQuotes);
         }
       } catch (error) {
         console.error("Error loading quotes:", error);
@@ -75,13 +66,53 @@ export const VideoQuote = () => {
     loadQuotes();
   }, []);
 
+  // Continuous quote cycling
+  const startQuoteCycling = (quoteList: string[]) => {
+    if (quoteList.length === 0) return;
+
+    // Clear any existing interval
+    if (quoteIntervalRef.current) {
+      clearInterval(quoteIntervalRef.current);
+    }
+
+    // Show first quote immediately
+    const showNewQuote = () => {
+      const randomQuote = quoteList[Math.floor(Math.random() * quoteList.length)];
+      setCurrentQuote(randomQuote);
+      setShowQuote(false);
+
+      // Fade in after brief delay
+      setTimeout(() => {
+        setShowQuote(true);
+      }, 100);
+    };
+
+    // Show first quote after 1 second
+    setTimeout(() => {
+      showNewQuote();
+    }, 1000);
+
+    // Then cycle quotes every 8 seconds (1s fade in + 5s visible + 1s fade out + 1s gap)
+    quoteIntervalRef.current = window.setInterval(() => {
+      showNewQuote();
+    }, 8000);
+  };
+
+  // Cleanup interval on unmount
+  useEffect(() => {
+    return () => {
+      if (quoteIntervalRef.current) {
+        clearInterval(quoteIntervalRef.current);
+      }
+    };
+  }, []);
+
   const startTransition = () => {
     if (isTransitioning) return;
 
     setIsTransitioning(true);
 
-    // Prepare next random combination
-    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    // Prepare next random video
     const randomVideoIndex = Math.floor(Math.random() * videos.length);
 
     // Preload next video in the inactive video element
@@ -99,18 +130,7 @@ export const VideoQuote = () => {
         setTimeout(() => {
           setActiveVideo(activeVideo === 1 ? 2 : 1);
           setCurrentVideoIndex(randomVideoIndex);
-
-          // Fade in new quote after crossfade completes (2 seconds after transition start)
-          setTimeout(() => {
-            setCurrentQuote(randomQuote);
-            setShowQuote(true);
-            setIsTransitioning(false);
-
-            // Keep quote visible for 5 seconds, then fade out (1.5s fade out)
-            setTimeout(() => {
-              setShowQuote(false);
-            }, 5000);
-          }, 2000);
+          setIsTransitioning(false);
         }, 1000);
       };
     }
@@ -211,6 +231,7 @@ export const VideoQuote = () => {
             ${showQuote ? "opacity-100" : "opacity-0"}
           `}
           style={{
+            color: '#ffffff',
             fontSize: '3.5vw',
             fontFamily: "'Helvetica Neue', Arial, sans-serif",
             fontWeight: 900,
