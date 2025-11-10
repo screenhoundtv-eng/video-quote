@@ -9,10 +9,8 @@ const videos = [
   "/videos/interior.mp4",
 ];
 
-const VIDEO_DURATION = 25; // seconds
-
 export const VideoQuote = () => {
-  const [quotes, setQuotes] = useState<string[]>([]);
+  const [, setQuotes] = useState<string[]>([]);
   const [currentQuote, setCurrentQuote] = useState("");
   const [currentVideoIndex, setCurrentVideoIndex] = useState(() => Math.floor(Math.random() * videos.length));
   const [showQuote, setShowQuote] = useState(false);
