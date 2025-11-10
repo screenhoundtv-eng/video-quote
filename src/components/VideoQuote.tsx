@@ -167,9 +167,10 @@ export const VideoQuote = () => {
           activeVideo === 1 ? "opacity-100" : "opacity-0"
         }`}
         style={{
-          transform: 'scale(1.05) translateY(-4%)',
+          transform: 'scale(1.10) translateY(-5%)',
           margin: 0,
           padding: 0,
+          zIndex: 2,
         }}
         autoPlay
         playsInline
@@ -182,9 +183,10 @@ export const VideoQuote = () => {
           activeVideo === 2 ? "opacity-100" : "opacity-0"
         }`}
         style={{
-          transform: 'scale(1.05) translateY(-4%)',
+          transform: 'scale(1.10) translateY(-5%)',
           margin: 0,
           padding: 0,
+          zIndex: 2,
         }}
         playsInline
         muted
