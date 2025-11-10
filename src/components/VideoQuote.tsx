@@ -57,9 +57,14 @@ export const VideoQuote = () => {
             }
           }, 100);
 
-          // Fade in quote after 2 seconds
+          // Fade in quote after 2 seconds (1.5s fade in)
           setTimeout(() => {
             setShowQuote(true);
+
+            // Keep quote visible for 5 seconds, then fade out (1.5s fade out)
+            setTimeout(() => {
+              setShowQuote(false);
+            }, 5000);
           }, 2000);
         }
       } catch (error) {
@@ -88,9 +93,14 @@ export const VideoQuote = () => {
       video1.play().catch(err => console.log("Play error:", err));
     }
 
-    // Fade in quote after 2 seconds
+    // Fade in quote after 2 seconds (1.5s fade in)
     setTimeout(() => {
       setShowQuote(true);
+
+      // Keep quote visible for 5 seconds, then fade out (1.5s fade out)
+      setTimeout(() => {
+        setShowQuote(false);
+      }, 5000);
     }, 2000);
   };
 
@@ -119,11 +129,16 @@ export const VideoQuote = () => {
           setActiveVideo(activeVideo === 1 ? 2 : 1);
           setCurrentVideoIndex(randomVideoIndex);
 
-          // Fade in new quote after crossfade completes
+          // Fade in new quote after crossfade completes (2 seconds after transition start)
           setTimeout(() => {
             setCurrentQuote(randomQuote);
             setShowQuote(true);
             setIsTransitioning(false);
+
+            // Keep quote visible for 5 seconds, then fade out (1.5s fade out)
+            setTimeout(() => {
+              setShowQuote(false);
+            }, 5000);
           }, 2000);
         }, 1000);
       };
@@ -166,11 +181,6 @@ export const VideoQuote = () => {
 
     const handleTimeUpdate = () => {
       const currentTime = activeVideoRef.currentTime;
-
-      // Fade out quote at 20 seconds (5s before end)
-      if (currentTime >= 20 && showQuote && !isTransitioning) {
-        setShowQuote(false);
-      }
 
       // Start preloading and transition at 23 seconds for seamless loop
       if (currentTime >= 23 && !isTransitioning) {
@@ -220,21 +230,23 @@ export const VideoQuote = () => {
       <div className="absolute inset-0 bg-black/30" />
 
       {/* Quote Overlay */}
-      <div className="absolute inset-0 flex items-center justify-center px-8 md:px-16 lg:px-32">
-        <p
-          className={`
-            text-3xl md:text-4xl lg:text-5xl xl:text-6xl
-            text-foreground text-center font-serif leading-relaxed
-            transition-opacity duration-[4000ms] ease-in-out
-            ${showQuote ? "opacity-100" : "opacity-0"}
-          `}
-          style={{
-            textShadow: "0 4px 12px rgba(0, 0, 0, 0.9), 0 2px 4px rgba(0, 0, 0, 0.8)",
-          }}
-        >
-      {currentQuote}
-        </p>
-      </div>
+      <p
+        className={`
+          absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+          text-white text-center font-bold leading-tight
+          px-8 md:px-16 lg:px-32 max-w-[90vw]
+          transition-opacity duration-[1500ms] ease-in-out
+          ${showQuote ? "opacity-100" : "opacity-0"}
+        `}
+        style={{
+          fontSize: 'clamp(2.5rem, 8vw, 6rem)',
+          fontFamily: '"Arial Black", "Arial Bold", Impact, "Times New Roman", serif',
+          fontWeight: 900,
+          textShadow: "0 4px 12px rgba(0, 0, 0, 0.9), 0 2px 4px rgba(0, 0, 0, 0.8)",
+        }}
+      >
+        {currentQuote}
+      </p>
 
       {/* Watermark Logo */}
       <div className="absolute bottom-4 right-4 z-10 opacity-60 hover:opacity-80 transition-opacity">
