@@ -167,7 +167,9 @@ export const VideoQuote = () => {
           activeVideo === 1 ? "opacity-100" : "opacity-0"
         }`}
         style={{
-          transform: 'scale(1.02) translateY(-2%)',
+          transform: 'scale(1.05) translateY(-4%)',
+          margin: 0,
+          padding: 0,
         }}
         autoPlay
         playsInline
@@ -180,7 +182,9 @@ export const VideoQuote = () => {
           activeVideo === 2 ? "opacity-100" : "opacity-0"
         }`}
         style={{
-          transform: 'scale(1.02) translateY(-2%)',
+          transform: 'scale(1.05) translateY(-4%)',
+          margin: 0,
+          padding: 0,
         }}
         playsInline
         muted
@@ -192,7 +196,8 @@ export const VideoQuote = () => {
 
       {/* Quote Overlay */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 p-5 text-center max-w-[80%] pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-5 text-center max-w-[80%] pointer-events-none"
+        style={{ zIndex: 100 }}
       >
         <p
           className={`
