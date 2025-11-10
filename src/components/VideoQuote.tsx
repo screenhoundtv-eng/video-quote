@@ -14,11 +14,10 @@ const VIDEO_DURATION = 25; // seconds
 export const VideoQuote = () => {
   const [quotes, setQuotes] = useState<string[]>([]);
   const [currentQuote, setCurrentQuote] = useState("");
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(() => Math.floor(Math.random() * videos.length));
   const [showQuote, setShowQuote] = useState(false);
   const [activeVideo, setActiveVideo] = useState<1 | 2>(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [hasStarted, setHasStarted] = useState(false);
   const videoRef1 = useRef<HTMLVideoElement>(null);
   const videoRef2 = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,6 +43,25 @@ export const VideoQuote = () => {
           });
 
         setQuotes(parsedQuotes);
+
+        // Immediately show random quote and start video
+        if (parsedQuotes.length > 0) {
+          const randomQuote = parsedQuotes[Math.floor(Math.random() * parsedQuotes.length)];
+          setCurrentQuote(randomQuote);
+
+          // Start first video
+          setTimeout(() => {
+            const video1 = videoRef1.current;
+            if (video1) {
+              video1.play().catch(err => console.log("Play error:", err));
+            }
+          }, 100);
+
+          // Fade in quote after 2 seconds
+          setTimeout(() => {
+            setShowQuote(true);
+          }, 2000);
+        }
       } catch (error) {
         console.error("Error loading quotes:", error);
       }
@@ -51,12 +69,6 @@ export const VideoQuote = () => {
 
     loadQuotes();
   }, []);
-
-  const handleStart = () => {
-    if (hasStarted) return;
-    setHasStarted(true);
-    randomizeCombination(quotes);
-  };
 
   const randomizeCombination = (quoteList: string[] = quotes) => {
     if (quoteList.length === 0) return;
@@ -179,9 +191,8 @@ export const VideoQuote = () => {
     <div
       ref={containerRef}
       className="relative w-full h-screen overflow-hidden bg-black cursor-pointer"
-      onClick={handleStart}
       onDoubleClick={toggleFullscreen}
-      title="Click to start | Press F or double-click for fullscreen"
+      title="Press F or double-click for fullscreen"
     >
       {/* Video Background - Dual Video System for Crossfade */}
       <video
@@ -190,6 +201,7 @@ export const VideoQuote = () => {
         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms] ease-in-out ${
           activeVideo === 1 ? "opacity-100" : "opacity-0"
         }`}
+        autoPlay
         playsInline
         muted
         loop={false}
@@ -206,20 +218,6 @@ export const VideoQuote = () => {
 
       {/* Dark Overlay for better text readability */}
       <div className="absolute inset-0 bg-black/30" />
-
-      {/* Click to Start Overlay */}
-      {!hasStarted && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-50">
-          <div className="text-center">
-            <p className="text-4xl md:text-5xl lg:text-6xl text-white font-serif mb-4">
-              Click to Start
-            </p>
-            <p className="text-xl md:text-2xl text-white/70">
-              Inspirational quotes with beautiful videos
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* Quote Overlay */}
       <div className="absolute inset-0 flex items-center justify-center px-8 md:px-16 lg:px-32">
