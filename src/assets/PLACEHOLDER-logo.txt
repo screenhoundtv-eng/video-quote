@@ -1,0 +1,7 @@
+PLACEHOLDER: Add your logo.jpeg file here
+
+This is a placeholder file. Please add your actual logo.jpeg file to this directory.
+
+The VideoQuote component expects a file named "logo.jpeg" in this location.
+
+You can copy it from your Lovable project's assets folder.
